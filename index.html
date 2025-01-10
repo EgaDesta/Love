@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Romantic App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #ffecf7;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .container {
+        text-align: center;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        z-index: 2;
+        width: 90%; /* Membuat container lebih kecil di perangkat mobile */
+        max-width: 400px; /* Batas lebar untuk mobile */
+      }
+
+      h1 {
+        font-size: 36px;
+        color: #e91e63;
+      }
+
+      .buttons {
+        margin-top: 20px;
+      }
+
+      .button {
+        padding: 15px 30px;
+        font-size: 18px;
+        margin: 10px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        transition: all 0.3s;
+      }
+
+      .button-yes {
+        background-color: #e91e63;
+        color: white;
+      }
+
+      .button-no {
+        background-color: #9e9e9e;
+        color: white;
+      }
+
+      .button:hover {
+        transform: scale(1.1);
+      }
+
+      .love {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 100px;
+        color: #e91e63;
+        animation: love-animation 1s infinite;
+        z-index: 3;
+      }
+
+      @keyframes love-animation {
+        0% {
+          transform: scale(1) translate(-50%, -50%);
+        }
+        50% {
+          transform: scale(1.3) translate(-50%, -50%);
+        }
+        100% {
+          transform: scale(1) translate(-50%, -50%);
+        }
+      }
+
+      .fireworks {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+        display: none;
+      }
+
+      .firework {
+        position: absolute;
+        border-radius: 50%;
+        background-color: rgba(233, 30, 99, 0.8);
+        opacity: 0;
+        animation: fireworks-animation 1s forwards;
+      }
+
+      @keyframes fireworks-animation {
+        0% {
+          opacity: 1;
+          transform: scale(0);
+        }
+        100% {
+          opacity: 0;
+          transform: scale(5);
+        }
+      }
+
+      /* Fullscreen */
+      .fullscreen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .fullscreen .container {
+        background-color: #ffffff;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+      }
+
+      @media (max-width: 600px) {
+        .button {
+          padding: 12px 24px;
+          font-size: 16px; /* Menyesuaikan ukuran tombol */
+        }
+
+        .love {
+          font-size: 80px; /* Menyesuaikan ukuran love emoji */
+        }
+
+        h1 {
+          font-size: 28px; /* Menyesuaikan ukuran judul pada perangkat mobile */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="fireworks" id="fireworks"></div>
+
+    <div class="container">
+      <h1>Apakah Kamu Mencintai Ega?</h1>
+      <div class="buttons">
+        <button class="button button-no" id="no-btn">Tidak</button>
+        <button class="button button-yes" id="yes-btn">Iya</button>
+      </div>
+      <div class="love">❤️</div>
+    </div>
+
+    <script>
+      const noBtn = document.getElementById("no-btn");
+      const yesBtn = document.getElementById("yes-btn");
+      const love = document.querySelector(".love");
+      const fireworks = document.getElementById("fireworks");
+      const body = document.body;
+      let buttonsContainer = document.querySelector(".buttons");
+
+      // Fungsi untuk memasukkan halaman ke dalam mode fullscreen
+      function goFullscreen() {
+        if (body.requestFullscreen) {
+          body.requestFullscreen();
+        } else if (body.mozRequestFullScreen) {
+          body.mozRequestFullScreen();
+        } else if (body.webkitRequestFullscreen) {
+          body.webkitRequestFullscreen();
+        } else if (body.msRequestFullscreen) {
+          body.msRequestFullscreen();
+        }
+      }
+
+      // Efek tombol "Tidak" yang bergerak cepat saat mendekat
+      noBtn.addEventListener("mousemove", (event) => {
+        const mouseX = event.clientX;
+        const mouseY = event.clientY;
+        const btnRect = noBtn.getBoundingClientRect();
+        const btnCenterX = btnRect.left + btnRect.width / 2;
+        const btnCenterY = btnRect.top + btnRect.height / 2;
+        const distance = Math.sqrt(
+          Math.pow(mouseX - btnCenterX, 2) + Math.pow(mouseY - btnCenterY, 2)
+        );
+
+        if (distance < 50) {
+          // Jika jarak kurang dari 50px, tombol bergerak cepat
+          const moveX = Math.random() * 300 - 300; // Gerakan acak yang lebih besar di sumbu X
+          const moveY = Math.random() * 300 - 300; // Gerakan acak yang lebih besar di sumbu Y
+          noBtn.style.transition = "transform 0.1s ease-out"; // Mempercepat transisi
+          noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`; // Menjauhkan tombol lebih cepat
+          noBtn.style.pointerEvents = "none"; // Menonaktifkan klik pada tombol Tidak
+          setTimeout(() => {
+            noBtn.style.pointerEvents = "auto"; // Mengaktifkan kembali klik setelah beberapa detik
+          }, 1);
+        }
+      });
+
+      // Ketika pengguna mengklik "Iya"
+      yesBtn.addEventListener("click", () => {
+        // Memasukkan halaman ke dalam mode fullscreen
+        goFullscreen();
+
+        // Mengubah tampilan menjadi fullscreen dan menonaktifkan Esc
+        body.classList.add("fullscreen");
+        document.querySelector("h1").textContent =
+          "Apakah Kamu Mau Bersama Ega?";
+        buttonsContainer.innerHTML = `<button class="button button-yes" id="yes-btn-2">Iya</button>`;
+
+        // Menangani klik tombol "Iya" kedua
+        const yesBtn2 = document.getElementById("yes-btn-2");
+        yesBtn2.addEventListener("click", () => {
+          love.style.display = "block"; // Menampilkan love emoji
+          fireworks.style.display = "block"; // Menampilkan kembang api
+
+          // Menambahkan efek kembang api
+          for (let i = 0; i < 30; i++) {
+            // Perbanyak kembang api
+            const firework = document.createElement("div");
+            firework.classList.add("firework");
+            firework.style.width = `${Math.random() * 30 + 10}px`;
+            firework.style.height = firework.style.width;
+            firework.style.top = `${Math.random() * window.innerHeight}px`;
+            firework.style.left = `${Math.random() * window.innerWidth}px`;
+            fireworks.appendChild(firework);
+            setTimeout(() => firework.remove(), 5000);
+          }
+
+          // Menghentikan interaksi setelah kembang api
+          setTimeout(() => {
+            alert("Selamat! Kamu dan Ega akan bersama selamanya! ❤️");
+          }, 1500);
+        });
+      });
+
+      // Mencegah tombol Esc untuk keluar
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+        }
+      });
+    </script>
+  </body>
+</html>
