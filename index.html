@@ -24,8 +24,8 @@
         border-radius: 10px;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         z-index: 2;
-        width: 90%; /* Membuat container lebih kecil di perangkat mobile */
-        max-width: 400px; /* Batas lebar untuk mobile */
+        width: 90%;
+        max-width: 400px;
       }
 
       h1 {
@@ -136,18 +136,41 @@
         box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
       }
 
+      .form-message {
+        display: none;
+        margin-top: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        z-index: 2;
+        position: relative;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        resize: none;
+      }
+
       @media (max-width: 600px) {
         .button {
           padding: 12px 24px;
-          font-size: 16px; /* Menyesuaikan ukuran tombol */
+          font-size: 16px;
         }
 
         .love {
-          font-size: 80px; /* Menyesuaikan ukuran love emoji */
+          font-size: 80px;
         }
 
         h1 {
-          font-size: 28px; /* Menyesuaikan ukuran judul pada perangkat mobile */
+          font-size: 28px;
+        }
+
+        .form-message textarea {
+          width: 100%;
         }
       }
     </style>
@@ -156,7 +179,7 @@
     <div class="fireworks" id="fireworks"></div>
 
     <div class="container">
-      <h1>Apakah Kamu Mencintai Ega?</h1>
+      <h1>Halo Esti, apakah kamu suka dengan Ega??</h1>
       <div class="buttons">
         <button class="button button-no" id="no-btn">Tidak</button>
         <button class="button button-yes" id="yes-btn">Iya</button>
@@ -172,8 +195,8 @@
             rows="4"
             cols="50"
             placeholder="Tulis pesanmu di sini..."
-          ></textarea
-          ><br />
+          ></textarea>
+          <br />
           <button type="submit" class="button button-yes">Kirim Pesan</button>
         </form>
       </div>
@@ -184,7 +207,7 @@
       src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
     ></script>
     <script>
-      emailjs.init("QueCl9uGcgg1lla6M"); // Ganti dengan User ID EmailJS Anda
+      emailjs.init("QueCl9uGcgg1lla6M");
 
       const noBtn = document.getElementById("no-btn");
       const yesBtn = document.getElementById("yes-btn");
@@ -195,7 +218,6 @@
       const formMessage = document.querySelector(".form-message");
       const messageForm = document.getElementById("message-form");
 
-      // Fungsi untuk memasukkan halaman ke dalam mode fullscreen
       function goFullscreen() {
         if (body.requestFullscreen) {
           body.requestFullscreen();
@@ -208,7 +230,6 @@
         }
       }
 
-      // Efek tombol "Tidak" yang bergerak cepat saat mendekat
       noBtn.addEventListener("mousemove", (event) => {
         const mouseX = event.clientX;
         const mouseY = event.clientY;
@@ -220,36 +241,33 @@
         );
 
         if (distance < 50) {
-          // Jika jarak kurang dari 50px, tombol bergerak cepat
-          const moveX = Math.random() * 300 - 300; // Gerakan acak yang lebih besar di sumbu X
-          const moveY = Math.random() * 300 - 300; // Gerakan acak yang lebih besar di sumbu Y
-          noBtn.style.transition = "transform 0.1s ease-out"; // Mempercepat transisi
-          noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`; // Menjauhkan tombol lebih cepat
-          noBtn.style.pointerEvents = "none"; // Menonaktifkan klik pada tombol Tidak
+          const moveX = Math.random() * 300 - 300;
+          const moveY = Math.random() * 300 - 300;
+          noBtn.style.transition = "transform 0.1s ease-out";
+          noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+          noBtn.style.pointerEvents = "none";
           setTimeout(() => {
-            noBtn.style.pointerEvents = "auto"; // Mengaktifkan kembali klik setelah beberapa detik
+            noBtn.style.pointerEvents = "auto";
           }, 1);
         }
       });
 
-      // Ketika pengguna mengklik "Iya"
       yesBtn.addEventListener("click", () => {
-        // Memasukkan halaman ke dalam mode fullscreen
         goFullscreen();
-
-        // Mengubah tampilan menjadi fullscreen dan menonaktifkan Esc
         body.classList.add("fullscreen");
         document.querySelector("h1").textContent =
-          "Apakah Kamu Mau Bersama Ega?";
+          "Akankah kamu mencintai Ega?";
         buttonsContainer.innerHTML = `<button class="button button-yes" id="yes-btn-2">Iya</button>`;
 
-        // Menangani klik tombol "Iya" kedua
         const yesBtn2 = document.getElementById("yes-btn-2");
         yesBtn2.addEventListener("click", () => {
-          love.style.display = "block"; // Menampilkan love emoji
-          fireworks.style.display = "block"; // Menampilkan kembang api
+          love.style.display = "block";
+          fireworks.style.display = "block";
 
-          // Menambahkan efek kembang api
+          setTimeout(() => {
+            love.style.display = "none";
+          }, 5000); // Love emoji akan hilang setelah 5 detik
+
           for (let i = 0; i < 30; i++) {
             const firework = document.createElement("div");
             firework.classList.add("firework");
@@ -261,36 +279,35 @@
             setTimeout(() => firework.remove(), 5000);
           }
 
-          // Menampilkan form pesan
           formMessage.style.display = "block";
         });
       });
 
-      // Mencegah tombol Esc untuk keluar
       window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
           event.preventDefault();
         }
       });
 
-      // Mengirim pesan melalui EmailJS
       messageForm.addEventListener("submit", (event) => {
         event.preventDefault();
         const message = document.getElementById("message").value;
 
         const templateParams = {
           message: message,
-          to_email: "vinxxo981@gmail.com", // Ganti dengan alamat email yang sesuai
+          to_email: "vinxxo981@gmail.com",
         };
 
         emailjs
-          .send("service_yw7zvis", "template_8krfina", templateParams)
+          .send("service_yw7z7bm", "template_t1weqg5", templateParams)
           .then(
             (response) => {
-              alert("Pesan berhasil dikirim!");
+              alert("Pesan terkirim!");
+              formMessage.style.display = "none";
             },
             (error) => {
-              alert("Terjadi kesalahan saat mengirim pesan: " + error.text);
+              alert("Pesan gagal terkirim");
+              console.log(error);
             }
           );
       });
