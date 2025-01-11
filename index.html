@@ -176,8 +176,6 @@
     </style>
   </head>
   <body>
-    <div class="fireworks" id="fireworks"></div>
-
     <div class="container">
       <h1>Halo Esti, apakah kamu suka dengan Ega??</h1>
       <div class="buttons">
@@ -189,12 +187,17 @@
       <!-- Form Pesan -->
       <div class="form-message" style="display: none">
         <h2>Pesan untuk Ega</h2>
-        <form id="message-form">
+        <form
+          action="https://formspree.io/f/mzzzyveg"
+          method="POST"
+          id="message-form"
+        >
           <textarea
-            id="message"
+            name="message"
             rows="4"
             cols="50"
             placeholder="Tulis pesanmu di sini..."
+            required
           ></textarea>
           <br />
           <button type="submit" class="button button-yes">Kirim Pesan</button>
@@ -202,33 +205,12 @@
       </div>
     </div>
 
-    <script
-      type="text/javascript"
-      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
-    ></script>
     <script>
-      emailjs.init("QueCl9uGcgg1lla6M");
-
       const noBtn = document.getElementById("no-btn");
       const yesBtn = document.getElementById("yes-btn");
       const love = document.querySelector(".love");
       const fireworks = document.getElementById("fireworks");
-      const body = document.body;
-      let buttonsContainer = document.querySelector(".buttons");
       const formMessage = document.querySelector(".form-message");
-      const messageForm = document.getElementById("message-form");
-
-      function goFullscreen() {
-        if (body.requestFullscreen) {
-          body.requestFullscreen();
-        } else if (body.mozRequestFullScreen) {
-          body.mozRequestFullScreen();
-        } else if (body.webkitRequestFullscreen) {
-          body.webkitRequestFullscreen();
-        } else if (body.msRequestFullscreen) {
-          body.msRequestFullscreen();
-        }
-      }
 
       noBtn.addEventListener("mousemove", (event) => {
         const mouseX = event.clientX;
@@ -253,63 +235,11 @@
       });
 
       yesBtn.addEventListener("click", () => {
-        goFullscreen();
-        body.classList.add("fullscreen");
-        document.querySelector("h1").textContent =
-          "Akankah kamu mencintai Ega?";
-        buttonsContainer.innerHTML = `<button class="button button-yes" id="yes-btn-2">Iya</button>`;
-
-        const yesBtn2 = document.getElementById("yes-btn-2");
-        yesBtn2.addEventListener("click", () => {
-          love.style.display = "block";
-          fireworks.style.display = "block";
-
-          setTimeout(() => {
-            love.style.display = "none";
-          }, 5000); // Love emoji akan hilang setelah 5 detik
-
-          for (let i = 0; i < 30; i++) {
-            const firework = document.createElement("div");
-            firework.classList.add("firework");
-            firework.style.width = `${Math.random() * 30 + 10}px`;
-            firework.style.height = firework.style.width;
-            firework.style.top = `${Math.random() * window.innerHeight}px`;
-            firework.style.left = `${Math.random() * window.innerWidth}px`;
-            fireworks.appendChild(firework);
-            setTimeout(() => firework.remove(), 5000);
-          }
-
+        love.style.display = "block";
+        setTimeout(() => {
+          love.style.display = "none";
           formMessage.style.display = "block";
-        });
-      });
-
-      window.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-          event.preventDefault();
-        }
-      });
-
-      messageForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const message = document.getElementById("message").value;
-
-        const templateParams = {
-          message: message,
-          to_email: "vinxxo981@gmail.com",
-        };
-
-        emailjs
-          .send("service_yw7z7bm", "template_t1weqg5", templateParams)
-          .then(
-            (response) => {
-              alert("Pesan terkirim!");
-              formMessage.style.display = "none";
-            },
-            (error) => {
-              alert("Pesan gagal terkirim");
-              console.log(error);
-            }
-          );
+        }, 2000);
       });
     </script>
   </body>
