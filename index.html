@@ -176,6 +176,8 @@
     </style>
   </head>
   <body>
+    <div class="fireworks" id="fireworks"></div>
+
     <div class="container">
       <h1>Halo Esti, apakah kamu suka dengan Ega??</h1>
       <div class="buttons">
@@ -188,11 +190,12 @@
       <div class="form-message" style="display: none">
         <h2>Pesan untuk Ega</h2>
         <form
-          action="https://formspree.io/f/mzzzyveg"
-          method="POST" 
           id="message-form"
+          action="https://formspree.io/f/mzzzyveg"
+          method="POST"
         >
           <textarea
+            id="message"
             name="message"
             rows="4"
             cols="50"
@@ -210,7 +213,21 @@
       const yesBtn = document.getElementById("yes-btn");
       const love = document.querySelector(".love");
       const fireworks = document.getElementById("fireworks");
+      const body = document.body;
+      let buttonsContainer = document.querySelector(".buttons");
       const formMessage = document.querySelector(".form-message");
+
+      function goFullscreen() {
+        if (body.requestFullscreen) {
+          body.requestFullscreen();
+        } else if (body.mozRequestFullScreen) {
+          body.mozRequestFullScreen();
+        } else if (body.webkitRequestFullscreen) {
+          body.webkitRequestFullscreen();
+        } else if (body.msRequestFullscreen) {
+          body.msRequestFullscreen();
+        }
+      }
 
       noBtn.addEventListener("mousemove", (event) => {
         const mouseX = event.clientX;
@@ -235,11 +252,44 @@
       });
 
       yesBtn.addEventListener("click", () => {
-        love.style.display = "block";
-        setTimeout(() => {
-          love.style.display = "none";
+        goFullscreen();
+        body.classList.add("fullscreen");
+        document.querySelector("h1").textContent =
+          "Akankah kamu mencintai Ega?";
+        buttonsContainer.innerHTML = `<button class="button button-yes" id="yes-btn-2">Iya</button>`;
+
+        const yesBtn2 = document.getElementById("yes-btn-2");
+        yesBtn2.addEventListener("click", () => {
+          love.style.display = "block";
+          fireworks.style.display = "block";
+
+          setTimeout(() => {
+            love.style.display = "none";
+          }, 5000); // Love emoji akan hilang setelah 5 detik
+
+          for (let i = 0; i < 30; i++) {
+            const firework = document.createElement("div");
+            firework.classList.add("firework");
+            firework.style.width = `${Math.random() * 30 + 10}px`;
+            firework.style.height = firework.style.width;
+            firework.style.top = `${Math.random() * window.innerHeight}px`;
+            firework.style.left = `${Math.random() * window.innerWidth}px`;
+            fireworks.appendChild(firework);
+            setTimeout(() => firework.remove(), 5000);
+          }
+
+          // Sembunyikan tombol dan teks
+          yesBtn2.style.display = "none"; // Hilangkan tombol
+          document.querySelector("h1").style.display = "none"; // Hilangkan teks
+
           formMessage.style.display = "block";
-        }, 2000);
+        });
+      });
+
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+        }
       });
     </script>
   </body>
